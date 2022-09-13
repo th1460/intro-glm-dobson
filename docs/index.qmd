@@ -1,0 +1,43 @@
+---
+title: "An Introduction to GLM"
+author: "Thiago Pires"
+date: "`r Sys.Date()`"
+format: 
+  html:
+    toc: true
+---
+
+## Chapter 1
+
+### 1.6.5 Example: Tropical cyclones
+
+```{r}
+(cyclones <- dobson::cyclones |> 
+   subset(select = c(season, number)))
+```
+
+```{r}
+l <- function(lambda) {
+  sum(dpois(cyclones$number, 
+            lambda = lambda, 
+            log = TRUE))
+}
+
+g <- Vectorize(l)
+
+curve(g, 0, 15, axes = FALSE, col = "blue")
+axis(1)
+axis(2, las = 1, pos = 0)
+abline(h = sum(dpois(cyclones$number, 
+                     lambda = mean(cyclones$number), 
+                     log = TRUE)
+), 
+lty = 2, 
+col = "red")
+abline(v = mean(cyclones$number),
+       lty = 2,
+       col = "red")
+
+```
+
+The value that maximize the function is the mean: `r mean(cyclones$number)`.
